@@ -24,14 +24,14 @@ create table netflix
      type	varchar(10),
      title	varchar(150),
      director varchar(208),
-     casts	varchar(1000),
+     cast	varchar(1000),
      country varchar(150),
      date_added	varchar(50),
      release_year	int,
      rating	varchar(10),
      duration	varchar(15),
      listed_in	varchar(100),
-     descriptions varchar(250)
+     description varchar(250)
 );
 ```
 Business Problems and Solutions
@@ -140,7 +140,7 @@ Objective: Calculate and rank years by the average number of content releases by
 ```sql
 select * 
 from netflix
-where  listed_in ilike '%Documentaries%';
+where  listed_in like '%Documentaries%';
 ```
 Objective: Retrieve all movies classified as documentaries.
 
@@ -148,7 +148,7 @@ Objective: Retrieve all movies classified as documentaries.
 ```sql
 select *
 from netflix
-where director is null;
+where director = '';
 ```
 Objective: List content that does not have a director.
 
@@ -156,7 +156,7 @@ Objective: List content that does not have a director.
 ```sql
 select *
 from netflix
-where casts ilike '%salman Khan%'
+where cast like '%salman Khan%'
       and
 	  release_year >= extract(year from current_date) - 10;
 ```
@@ -168,7 +168,7 @@ select
       unnest(string_to_array(casts,',')) as actors,
 	  count(show_id) as num_movie
 from netflix
-where type ='Movie' and country ilike '%india%'
+where type ='Movie' and country like '%india%'
 group by 1
 order by 2 desc
 limit 10;
@@ -179,7 +179,7 @@ Objective: Identify the top 10 actors with the most appearances in Indian-produc
 ```sql
 select 
        case 
-	   when descriptions ilike '%kill%' or descriptions ilike '%violence%' then 'Bad' else 'good'
+	   when description like '%kill%' or description like '%violence%' then 'Bad' else 'good'
 	   end as lebel,
 	   count(show_id)
 from netflix
